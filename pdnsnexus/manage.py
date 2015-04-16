@@ -63,4 +63,3 @@ class AddServer(Command):
         db.session.commit()
         print "Server", server.name, "added."
         return 0
-

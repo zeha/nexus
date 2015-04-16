@@ -7,5 +7,6 @@ mgr = Manager(pdnsnexus.app)
 mgr.add_command("add-server", pdnsnexus.manage.AddServer())
 mgr.add_command("reset-password", pdnsnexus.manage.ResetPassword())
 
+
 def run():
     mgr.run()

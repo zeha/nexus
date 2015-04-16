@@ -28,7 +28,6 @@ class NexusServerBackgroundLogger(gunicorn.glogging.Logger):
         self.error_log.addHandler(self.syslog_handler)
 
     def _get_fmt(self):
-        #print os.getpid()
         return ('pdnsnexusd[%d]:' % os.getpid()) + ' %(message)s'
 
     def close_on_exec(self):
