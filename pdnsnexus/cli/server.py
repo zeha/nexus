@@ -65,8 +65,8 @@ class NexusServer(gunicorn.app.base.Application):
         self.cfg.set("workers", pdnsnexus.app.config['SERVER_WORKERS'])
         self.cfg.set("max_requests", pdnsnexus.app.config['SERVER_MAX_REQUESTS'])
         parser = argparse.ArgumentParser(prog=self.prog)
-        parser.add_argument("--daemon", action='store_true',
-                            help="background process")
+        parser.add_argument("--daemon", action='store', type=pdnsnexus.utils.powerbool, default=True,
+                            help="Run as background process (default=%(default)s)")
         parser.add_argument("--pid", dest='pidfile', metavar='FILE', action='store',
                             help="If set, write PID to file FILE")
         args = parser.parse_args()

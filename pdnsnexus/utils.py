@@ -24,6 +24,10 @@ def jsonarify(ary):
     return current_app.response_class(content, mimetype=mimetype)
 
 
+def powerbool(from_):
+    return from_.lower() in ('true', 'on', 'yes')
+
+
 @app.context_processor
 def inject_config():
     return dict(config=current_app.config)
