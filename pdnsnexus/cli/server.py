@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import gunicorn.app.base
 import gunicorn.glogging
+import gunicorn.util
 from gunicorn.config import Config
 import os
 import os.path
@@ -12,6 +13,20 @@ import logging.handlers
 install_path = os.path.abspath(os.path.dirname(__file__))
 os.chdir(install_path)
 import pdnsnexus
+import pdnsnexus.utils
+
+
+PROG_NAME = "pdnsnexusd"
+
+
+try:
+    from setproctitle import setproctitle
+
+    def _setproctitle(title):
+        setproctitle("%s: %s" % (PROG_NAME, title))
+    gunicorn.util._setproctitle = _setproctitle
+except ImportError:
+    pass
 
 
 class NexusServerBackgroundLogger(gunicorn.glogging.Logger):
@@ -69,4 +84,4 @@ class NexusServer(gunicorn.app.base.Application):
 
 
 def run():
-    NexusServer(prog="pdnsnexusd").run()
+    NexusServer(prog=PROG_NAME).run()
