@@ -4,6 +4,13 @@ from flask import Flask, current_app
 from flask.ext.security import Security, current_user
 import os
 
+from . import api
+from .models import user_datastore
+
+
+SERVICE_NAME = 'pdnsnexusd'
+
+
 
 class Control(Flask):
     jinja_options = dict(Flask.jinja_options,
@@ -12,16 +19,21 @@ class Control(Flask):
 
 app = Control(__name__, instance_relative_config=True)
 
-app.config.from_object('pdnsnexus.default_settings')
-
-# app.config.from_pyfile('pdnsnexus.conf')
 
 app.config['SECURITY_TRACKABLE'] = True
 app.config['SECURITY_CHANGEABLE'] = True
 app.config['SECURITY_URL_PREFIX'] = '/auth'
 app.config['SECURITY_CHANGE_URL'] = '/change-password'
 app.config['SECURITY_SEND_PASSWORD_CHANGE_EMAIL'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = app.config['DATABASE_URI']
+app.config['SECURITY_PASSWORD_HASH'] = 'pbkdf2_sha512'
+app.config['SECURITY_PASSWORD_SALT'] = None
+app.config['DEBUG'] = False
+app.config['PREFERRED_URL_SCHEME'] = 'http'
+app.config['IGNORE_SSL_ERRORS'] = False
+app.config['REMOTE_TIMEOUT'] = 1.5
+app.config['SERVER_WORKERS'] = 5
+app.config['SERVER_MAX_REQUESTS'] = 1000
+app.config['SERVER_BIND'] = '127.0.0.1:8086'
 
 
 def verify_config():
@@ -37,8 +49,6 @@ def not_found(error):
     return 'Not found', 404
 
 
-from . import api
 app.register_blueprint(api.mod, url_prefix='/api')
 
-from .models import user_datastore
 security = Security(app, user_datastore)
