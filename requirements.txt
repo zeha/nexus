@@ -14,7 +14,3 @@ requests
 WTForms==1.0.4
 gunicorn
 setproctitle
-
-pep8
-pep257
-pylint
